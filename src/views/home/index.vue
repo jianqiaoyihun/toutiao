@@ -1,5 +1,15 @@
 <template>
-  <div class="home">我是主页</div>
+  <el-container>
+    <el-aside>侧边栏</el-aside>
+    <el-container>
+      <el-header>
+        头部
+      </el-header>
+      <el-main>
+        主体
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>

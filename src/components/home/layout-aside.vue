@@ -3,7 +3,7 @@
     <div class="title">
       <img src="../../assets/img/logo_admin.png" alt="">
     </div>
-    <el-menu style="width:231px" background-color="#353b4e" text-color="#adafb5" active-text-color="#ffd04b">
+    <el-menu router style="width:231px" background-color="#353b4e" text-color="#adafb5" active-text-color="#ffd04b">
       <el-menu-item index="/home">
         首页
       </el-menu-item>

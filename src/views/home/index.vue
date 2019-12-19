@@ -1,6 +1,8 @@
 <template>
   <el-container>
-    <el-aside>侧边栏</el-aside>
+    <el-aside style="background-color:#353b4e;height:100vh;width:230px">
+      <layout-aside></layout-aside>
+    </el-aside>
     <el-container>
       <el-header>
         头部
@@ -14,11 +16,10 @@
 
 <script>
 // @ is an alias to /src
-
+import layoutAside from '../../components/home/layout-aside'
 export default {
-  name: 'home',
   components: {
-
+    'layout-aside': layoutAside
   }
 }
 </script>

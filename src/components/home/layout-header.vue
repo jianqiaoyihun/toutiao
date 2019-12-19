@@ -6,9 +6,9 @@
     </el-col>
     <el-col :span="4" class="right">
       <el-row type='flex' justify="end" align="middle">
-        <img src="../../assets/img/header.jpg" alt="">
+        <img :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
         <el-dropdown>
-          <span>星星</span>
+          <span>{{ userInfo.name }}</span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>个人信息</el-dropdown-item>
             <el-dropdown-item>Git地址</el-dropdown-item>
@@ -22,7 +22,23 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      userInfo: {},
+      defaultImg: require('../../assets/img/header.jpg') // 先把地址转换成变量
+    }
+  },
+  created () {
+    let token = window.localStorage.getItem('user-token')
+    this.$axios({
+      url: '/user/profile',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(result => {
+      this.userInfo = result.data.data
+    })
+  }
 }
 </script>
 

@@ -28,7 +28,7 @@ export default {
       loginForm: {
         mobile: '',
         code: '',
-        check: false
+        check: true
       },
       loginRules: {
         mobile: [{ required: true, message: '请输入您的手机号' }, { pattern: /^1[3456789]\d{9}$/, message: '请输入合法的手机号' }],

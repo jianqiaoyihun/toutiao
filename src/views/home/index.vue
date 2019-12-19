@@ -5,7 +5,7 @@
     </el-aside>
     <el-container>
       <el-header>
-        头部
+        <layout-header></layout-header>
       </el-header>
       <el-main>
         主体
@@ -17,9 +17,11 @@
 <script>
 // @ is an alias to /src
 import layoutAside from '../../components/home/layout-aside'
+import layoutHeader from '../../components/home/layout-header'
 export default {
   components: {
-    'layout-aside': layoutAside
+    'layout-aside': layoutAside,
+    'layout-header': layoutHeader
   }
 }
 </script>

@@ -1,5 +1,7 @@
 <template>
-  <div>评论列表</div>
+  <div>
+    <bread-crumb></bread-crumb>
+  </div>
 </template>
 
 <script>

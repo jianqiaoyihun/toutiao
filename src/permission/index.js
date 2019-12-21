@@ -2,8 +2,8 @@ import router from '../router'
 
 router.beforeEach(function (to, from, next) {
   // console.log(to)
-  let res = to.path.startsWith('/home')
-  if (res) {
+  // let res = to.path.startsWith('/home')
+  if (to.path.startsWith('/home')) {
     let token = window.localStorage.getItem('user-token')
     if (token) {
       next()

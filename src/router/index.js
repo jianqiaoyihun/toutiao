@@ -3,10 +3,10 @@ import VueRouter from 'vue-router'
 import Home from '../views/home'
 import Login from '../views/login'
 import Home2 from '../views/home/home'
-import Comment from '../views/comment'
-import Publish from '../views/publish'
-import Articles from '../views/articles'
-import Material from '../views/material'
+// import Comment from '../views/comment'
+// import Publish from '../views/publish'
+// import Articles from '../views/articles'
+// import Material from '../views/material'
 Vue.use(VueRouter)
 
 const routes = [
@@ -21,16 +21,16 @@ const routes = [
         component: Home2
       }, {
         path: 'comment',
-        component: Comment
+        component: () => import('../views/comment')// 按需加载
       }, {
         path: 'publish',
-        component: Publish
+        component: () => import('../views/publish')
       }, {
         path: 'articles',
-        component: Articles
+        component: () => import('../views/articles')
       }, {
         path: 'material',
-        component: Material
+        component: () => import('../views/material')
       }
     ]
   }, {

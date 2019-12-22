@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card>
+    <el-card v-loading="loading">
       <bread-crumb slot="header">
         <template slot="title">评论列表</template>
       </bread-crumb>
@@ -41,6 +41,7 @@ export default {
   data () {
     return {
       list: [],
+      loading: false,
       page: {
         total: 0,
         currentPage: 1,
@@ -54,6 +55,7 @@ export default {
       this.getComment()
     },
     getComment () {
+      this.loading = true
       this.$axios({
         url: '/articles',
         params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
@@ -61,6 +63,7 @@ export default {
       }).then(result => {
         this.list = result.data.results
         this.page.total = result.data.total_count // 获取文章总数
+        this.loading = false
       })
     },
     formatterBool (row, column, cellValue, index) {

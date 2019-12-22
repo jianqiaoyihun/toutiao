@@ -4,7 +4,7 @@
     <bread-crumb slot="header">
         <template slot="title">素材管理</template>
     </bread-crumb>
-    <el-tabs v-model="activeName" @tab-click="changeTab">
+    <el-tabs v-model="activeName" @tab-click="changeTab" v-loading="loading">
       <el-tab-pane label="全部素材" name="all">
         <!-- 用于存放内容 -->
         <div class="img-list">
@@ -26,6 +26,14 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+
+    <el-row type="flex" justify="center" style="height:80px" align="middle">
+        <el-pagination background layout="prev, pager, next"
+        :total="page.total"
+        :page-size="page.pageSize"
+        :current-page="page.currentPage"
+        @current-change="changePage"></el-pagination>
+      </el-row>
   </el-card>
 </template>
 
@@ -34,21 +42,35 @@ export default {
   data () {
     return {
       list: [],
-      activeName: 'all'
+      activeName: 'all',
+      page: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 8
+      },
+      loading: false
     }
   },
   methods: {
     getAllMaterial () {
+      this.loading = true
       this.$axios({
         url: '/user/images',
-        params: { collect: this.activeName === 'collect' }
+        params: { collect: this.activeName === 'collect', page: this.page.currentPage, per_page: this.page.pageSize }
         // 在这里collect需要的参数是布尔值，this.activeName是当前所在的页面的name，可以和collect进行判断
         // 因为默认的是all，这里如果是all，就是false，如果不是就是true，
       }).then((result) => {
+        this.loading = false
         this.list = result.data.results
+        this.page.total = result.data.total_count // 获取文章总数
       })
     },
     changeTab () {
+      this.page.currentPage = 1
+      this.getAllMaterial()
+    },
+    changePage (newPage) {
+      this.page.currentPage = newPage
       this.getAllMaterial()
     }
   },
@@ -63,9 +85,9 @@ export default {
      display: flex;
      flex-wrap: wrap;
      .img-card {
-         width: 200px;
-         height:240px;
-         margin: 20px 30px;
+         width: 150px;
+         height:200px;
+         margin: 20px 40px;
          position: relative;
          img {
              width: 100%;

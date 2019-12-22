@@ -30,7 +30,7 @@ const routes = [
         component: () => import('../views/articles')
       }, {
         path: 'material',
-        component: () => import('../views/material')
+        component: () => import('../views/material')// 按需加载，挂载路由
       }
     ]
   }, {

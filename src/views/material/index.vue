@@ -1,4 +1,5 @@
 <template>
+<!-- 新建页面 -->
   <el-card>
     <bread-crumb slot="header">
         <template slot="title">素材管理</template>

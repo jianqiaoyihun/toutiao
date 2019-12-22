@@ -1,6 +1,7 @@
 import axios from 'axios'
 import router from '../router'
 import { Message } from 'element-ui'
+import JSONBig from 'json-bigint'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 
 // axios 请求拦截注入headers  token令牌
@@ -12,11 +13,16 @@ axios.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 
+// 要在axios响应到达拦截之前进行一次转换，
+axios.defaults.transformResponse = [function (data) {
+  return JSONBig.parse(data)
+}]
+
 // axios 响应拦截，过滤数据
 axios.interceptors.response.use(function (response) {
   return response.data ? response.data : {}
 }, function (error) {
-  console.log(error)
+  // console.log(error)
   let status = error.response.status
   let message = ''
   switch (status) {

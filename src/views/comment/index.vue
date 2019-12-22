@@ -45,14 +45,16 @@ export default {
     openOrClose (row) {
       let mess = row.comment_status ? '关闭' : '打开'
       this.$confirm(`您是否确定要${mess}评论？`).then(() => {
+        // console.log(row)
         this.$axios({
           method: 'put',
           url: '/comments/status',
-          params: { article_id: row.id },
+          params: { article_id: row.id.toString() },
           data: {
             allow_comment: !row.comment_status
           }
         }).then(result => {
+          console.log(123)
           this.$message({
             type: 'success',
             message: '操作成功'

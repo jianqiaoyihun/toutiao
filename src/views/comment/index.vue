@@ -11,14 +11,28 @@
         <el-table-column label="粉丝评论数" prop="fans_comment_count"></el-table-column>
         <el-table-column label="操作">
           <!-- 放组件   作用域插槽  row column $index-->
-           <template slot-scope="obj">
-             <el-button type='text' size="small">修改</el-button>
-             <el-button type='text' size="small" @click="openOrClose(obj.row)">{{  obj.row.comment_status ? '关闭评论' : '打开评论'  }}</el-button>
-           </template>
+          <template slot-scope="obj">
+            <el-button type="text" size="small">修改</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="openOrClose(obj.row)"
+            >{{ obj.row.comment_status ? '关闭评论' : '打开评论' }}</el-button>
+          </template>
         </el-table-column>
       </el-table>
-    </el-card>
 
+      <!-- 分页组件 -->
+      <!-- 用el-row  来进行布局 -->
+      <el-row type="flex" justify="center" style="height:80px" align="middle">
+        <el-pagination background layout="prev, pager, next"
+        :total="page.total"
+        :page-size="page.pageSize"
+        :current-page="page.currentPage"
+        @current-change="changePage"></el-pagination>
+      </el-row>
+
+    </el-card>
   </div>
 </template>
 
@@ -26,13 +40,27 @@
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      page: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10
+      }
     }
   },
   methods: {
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.getComment()
+    },
     getComment () {
-      this.$axios({ url: '/articles', params: { response_type: 'comment' } }).then(result => {
+      this.$axios({
+        url: '/articles',
+        params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
+        // 增加请求参数，
+      }).then(result => {
         this.list = result.data.results
+        this.page.total = result.data.total_count // 获取文章总数
       })
     },
     formatterBool (row, column, cellValue, index) {
@@ -71,5 +99,4 @@ export default {
 </script>
 
 <style>
-
 </style>

@@ -16,8 +16,8 @@
           <el-card v-for="item in list" :key="item.id" class="img-card" body-style="padding:0">
             <img :src="item.url">
             <el-row type="flex" justify="space-around" align="middle" class="operate">
-               <i class='el-icon-star-on' @click="collectImage(item)" ref="sc"></i>
-               <i class='el-icon-delete-solid' @click="deleteImage(item)"></i>
+               <i class='el-icon-star-on pointer' @click="collectImage(item)" :class="{ changeColor: item.is_collected }"></i>
+               <i class='el-icon-delete-solid pointer' @click="deleteImage(item)"></i>
             </el-row>
           </el-card>
         </div>
@@ -134,6 +134,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .changeColor {
+    color: red
+  }
+  .pointer {
+    cursor: pointer;
+  }
   .btn {
     position: absolute;
     right: 20px

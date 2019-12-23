@@ -25,7 +25,7 @@
       <el-tab-pane label="收藏素材" name="collect">
         <!-- 用于存放内容 -->
         <div class="img-list">
-          <el-card v-for="item in list" :key="item.id" class="img-card">
+          <el-card v-for="item in list" :key="item.id" class="img-card" body-style="padding:0">
             <img :src="item.url" alt="">
           </el-card>
         </div>

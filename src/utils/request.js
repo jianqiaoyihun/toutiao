@@ -20,9 +20,10 @@ axios.defaults.transformResponse = [function (data) {
 
 // axios 响应拦截，过滤数据
 axios.interceptors.response.use(function (response) {
-  return response.data ? response.data : {}
+  console.log(response)
+  return response.data ? response.data : { response }
 }, function (error) {
-  // console.log(error)
+  console.dir(error)
   let status = error.response.status
   let message = ''
   switch (status) {
@@ -51,6 +52,6 @@ axios.interceptors.response.use(function (response) {
       break
   }
   Message({ type: 'warning', message }) // 提示消息
-  return Promise.reject(error)
+  return Promise.reject(error) // 结束，不让响应继续进行
 })
 export default axios

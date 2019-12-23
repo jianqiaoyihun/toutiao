@@ -4,8 +4,8 @@
     <bread-crumb slot="header">
         <template slot="title">素材管理</template>
     </bread-crumb>
-    <el-row type="flex" justify="end">
-      <el-upload :http-request="uploadImg" :show-file-list="false">
+    <el-row type="flex" justify="end" class="btn">
+      <el-upload :http-request="uploadImg" :show-file-list="false" action="aaa">
         <el-button size="small" type="primary">点击上传</el-button>
       </el-upload>
     </el-row>
@@ -13,11 +13,11 @@
       <el-tab-pane label="全部素材" name="all">
         <!-- 用于存放内容 -->
         <div class="img-list">
-          <el-card v-for="item in list" :key="item.id" class="img-card">
-            <img :src="item.url" alt="">
+          <el-card v-for="item in list" :key="item.id" class="img-card" body-style="padding:0">
+            <img :src="item.url">
             <el-row type="flex" justify="space-around" align="middle" class="operate">
-               <i class='el-icon-star-on'></i>
-               <i class='el-icon-delete-solid'></i>
+               <i class='el-icon-star-on' @click="collectImage(item)" ref="sc"></i>
+               <i class='el-icon-delete-solid' @click="deleteImage(item)"></i>
             </el-row>
           </el-card>
         </div>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -66,6 +67,7 @@ export default {
         // 因为默认的是all，这里如果是all，就是false，如果不是就是true，
       }).then((result) => {
         this.loading = false
+        console.log(result.data.results)
         this.list = result.data.results
         this.page.total = result.data.total_count // 获取文章总数
       })
@@ -90,6 +92,39 @@ export default {
         this.loading = false
         this.getAllMaterial()
       })
+    },
+    //  添加和取消收藏，通过判断收藏状态来实现
+    collectImage (item) {
+      console.log(item)
+      let shoucang = !item.is_collected
+      this.$axios({
+        url: `/user/images/${item.id}`,
+        method: 'put',
+        // params: { target: id },
+        data: { collect: shoucang }
+      }).then((message) => {
+        let messages = shoucang ? '收藏成功' : '取消收藏'
+        this.$message({
+          type: 'success',
+          message: messages
+        })
+        this.getAllMaterial()
+      })
+    },
+    deleteImage (item) {
+      this.$confirm('您是否确定要删除这个图片？').then(() => {
+        this.$axios({
+          url: `/user/images/${item.id}`,
+          method: 'delete'
+        // params: { target: id }
+        }).then((result) => {
+          console.log(111)
+          // alert(result)
+          // this.getAllMaterial()
+        }).catch(() => {
+          this.getAllMaterial()
+        })
+      })
     }
   },
   created () {
@@ -99,14 +134,20 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .btn {
+    position: absolute;
+    right: 20px
+  }
   .img-list {
      display: flex;
      flex-wrap: wrap;
      .img-card {
          width: 150px;
-         height:200px;
+         height:150px;
          margin: 20px 40px;
          position: relative;
+         border-radius: 5px;
+
          img {
              width: 100%;
              height: 100%;
@@ -116,7 +157,7 @@ export default {
            left: 0;
            bottom: 0;
            width: 100%;
-           font-size: 20px;
+           font-size: 22px;
            background-color: #f4f5f6;
            height: 30px;
          }

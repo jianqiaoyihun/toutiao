@@ -15,15 +15,16 @@ axios.interceptors.request.use(function (config) {
 
 // 要在axios响应到达拦截之前进行一次转换，
 axios.defaults.transformResponse = [function (data) {
-  return JSONBig.parse(data)
+  return data ? JSONBig.parse(data) : {}
+  // return JSONBig.parse(data)
 }]
 
 // axios 响应拦截，过滤数据
 axios.interceptors.response.use(function (response) {
-  console.log(response)
+  // console.log(response)
   return response.data ? response.data : { response }
 }, function (error) {
-  console.dir(error)
+  // console.dir(error)
   let status = error.response.status
   let message = ''
   switch (status) {

@@ -67,7 +67,7 @@ export default {
         // 因为默认的是all，这里如果是all，就是false，如果不是就是true，
       }).then((result) => {
         this.loading = false
-        console.log(result.data.results)
+        // console.log(result.data.results)
         this.list = result.data.results
         this.page.total = result.data.total_count // 获取文章总数
       })
@@ -95,7 +95,7 @@ export default {
     },
     //  添加和取消收藏，通过判断收藏状态来实现
     collectImage (item) {
-      console.log(item)
+      // console.log(item)
       let shoucang = !item.is_collected
       this.$axios({
         url: `/user/images/${item.id}`,
@@ -120,9 +120,9 @@ export default {
         }).then((result) => {
           console.log(111)
           // alert(result)
-          // this.getAllMaterial()
-        }).catch(() => {
           this.getAllMaterial()
+        }).catch(() => {
+          // this.getAllMaterial()
         })
       })
     }
@@ -142,7 +142,8 @@ export default {
   }
   .btn {
     position: absolute;
-    right: 20px
+    right: 20px;
+    z-index: 1000
   }
   .img-list {
      display: flex;

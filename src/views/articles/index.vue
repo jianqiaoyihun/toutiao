@@ -1,5 +1,9 @@
 <template>
-  <div>内容列表</div>
+  <el-card>
+    <bread-crumb slot="header">
+        <template slot="title">内容列表</template>
+    </bread-crumb>
+  </el-card>
 </template>
 
 <script>

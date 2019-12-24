@@ -143,7 +143,7 @@ export default {
   .btn {
     position: absolute;
     right: 20px;
-    z-index: 1000
+    z-index: 100
   }
   .img-list {
      display: flex;

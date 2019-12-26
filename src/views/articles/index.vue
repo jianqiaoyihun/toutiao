@@ -73,7 +73,7 @@
         <!-- 左侧 -->
        <el-col :span="14">
            <el-row type='flex'>
-             <img :src=" item.cover.images.length ? item.cover.images : defaultImage " alt="">
+             <img :src=" item.cover.images.length ? item.cover.images[0] : defaultImage " alt="">
               <div class='info'>
                 <span>{{ item.title }}</span>
                 <!-- 过滤器不但可以在插值表达中使用 还可以在v-bind表达式中使用 -->
@@ -142,7 +142,7 @@ export default {
         url: '/articles',
         params
       }).then(result => {
-        // console.log(result)
+        console.log(result)
         this.articlesList = result.data.results
         this.page.total = result.data.total_count // 文章总数
       })

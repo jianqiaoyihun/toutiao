@@ -17,7 +17,7 @@
           <el-radio :label="0">无图</el-radio>
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
-        <cover-image :list="formdata.cover.images"></cover-image>
+        <cover-image :list="formdata.cover.images" @ImageUrl="receiveData"></cover-image>
       </el-form-item>
       <!-- {{formdata.cover.images}} -->
       <el-form-item label="频道" prop="channel_id">
@@ -95,12 +95,15 @@ export default {
       }).then(res => {
         this.formdata = res.data
       })
+    },
+    receiveData (imageUrl) {
+      this.formdata.cover.images = [imageUrl.substr(5)]
     }
   },
   created () {
     this.getChannels()
-    // let { articleId } = this.$route.params
-    // articleId && this.getArticlesById(articleId)
+    let { articleId } = this.$route.params
+    articleId && this.getArticlesById(articleId)
   },
   watch: {
     $route: function (to, from) {
@@ -120,12 +123,25 @@ export default {
     },
     'formdata.cover.type': function () {
       // alert(this.formdata.cover.type)
-      if (this.formdata.cover.type === -1 || this.formdata.cover.type === 0) {
-        this.formdata.cover.images = []
-      } else if (this.formdata.cover.type === 1) {
-        this.formdata.cover.images = ['']
-      } else if (this.formdata.cover.type === 3) {
-        this.formdata.cover.images = ['', '', '']
+      let { articleId } = this.$route.params
+      if (!articleId) {
+        if (this.formdata.cover.type === -1 || this.formdata.cover.type === 0) {
+          this.formdata.cover.images = []
+        } else if (this.formdata.cover.type === 1) {
+          this.formdata.cover.images = ['']
+        } else if (this.formdata.cover.type === 3) {
+          this.formdata.cover.images = ['', '', '']
+        }
+      } else {
+        if (this.formdata.cover.type === -1 || this.formdata.cover.type === 0) {
+          this.formdata.cover.images = []
+        } else if (this.formdata.cover.type === 1) {
+          this.formdata.cover.images = [this.formdata.cover.images[0]]
+        } else if (this.formdata.cover.type === 3) {
+          if (this.formdata.cover.images.length < 2) {
+            this.formdata.cover.images = [this.formdata.cover.images[0], '', '']
+          }
+        }
       }
     }
   }

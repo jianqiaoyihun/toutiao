@@ -1,4 +1,5 @@
 <template>
+<div class="fixed">
   <el-row class="layout-header" type="flex" align="middle" justify="space-between">
     <el-col :span="7" class="left">
       <i class='el-icon-s-unfold'></i>
@@ -18,6 +19,8 @@
       </el-row>
     </el-col>
   </el-row>
+</div>
+
 </template>
 
 <script>
@@ -57,6 +60,7 @@ export default {
       height:60px;
       .left {
           font-size: 16px;
+          padding-left: 20px;
           .title {
               margin-left:4px;
               color: #2c3e50;
@@ -71,5 +75,12 @@ export default {
               margin-right:5px;
           }
       }
+  }
+  .fixed {
+    position: fixed;
+    width:1120px;
+    background-color: #fff;
+    z-index:100;
+    box-shadow: 0px 2px 2px #888888
   }
 </style>

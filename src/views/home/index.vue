@@ -1,10 +1,10 @@
 <template>
   <el-container>
-    <el-aside style="background-color:#353b4e;min-height:100vh;width:230px">
-      <layout-aside></layout-aside>
+    <el-aside style="background-color:#353b4e;min-height:100vh;width:230px" >
+      <layout-aside class="home-aside"></layout-aside>
     </el-aside>
     <el-container>
-      <el-header>
+      <el-header style="padding:0">
         <layout-header></layout-header>
       </el-header>
       <el-main style="padding:0">
@@ -26,3 +26,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+  .home-aside {
+    position: fixed;
+  }
+</style>

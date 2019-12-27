@@ -11,13 +11,13 @@
         <quill-editor style="height:200px;width:80%"   v-model="formdata.content" :options="editorOption" placeholder="文章内容"></quill-editor>
       </el-form-item>
       <el-form-item label="封面" prop="type" style="margin-top:60px">
-        <el-radio-group v-model="formdata.cover.type">
+        <el-radio-group v-model="formdata.cover.type" @change="changeType">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
           <el-radio :label="0">无图</el-radio>
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
-        <cover-image :list="formdata.cover.images" @ImageUrl="receiveData"></cover-image>
+        <cover-image :list="formdata.cover.images" @selectOneImg="receiveData"></cover-image>
       </el-form-item>
       <!-- {{formdata.cover.images}} -->
       <el-form-item label="频道" prop="channel_id">
@@ -54,7 +54,7 @@ export default {
       },
       channelsList: [],
       publishRules: {
-        title: [{ required: true, message: '标题不能为空' }, { min: 5, max: 10, message: '标题长度需要在5到30字符之间' }],
+        title: [{ required: true, message: '标题不能为空' }, { min: 5, max: 30, message: '标题长度需要在5到30字符之间' }],
         content: [{ required: true, message: '文章内容不能为空' }],
         channel_id: [{ required: true, message: '文章频道不能为空' }]
       },
@@ -96,8 +96,17 @@ export default {
         this.formdata = res.data
       })
     },
-    receiveData (imageUrl) {
-      this.formdata.cover.images = [imageUrl.substr(5)]
+    receiveData (img, index) {
+      this.formdata.cover.images.splice(index, 1, img)
+    },
+    changeType () {
+      if (this.formdata.cover.type === -1 || this.formdata.cover.type === 0) {
+        this.formdata.cover.images = []
+      } else if (this.formdata.cover.type === 1) {
+        this.formdata.cover.images = ['']
+      } else if (this.formdata.cover.type === 3) {
+        this.formdata.cover.images = ['', '', '']
+      }
     }
   },
   created () {
@@ -120,30 +129,30 @@ export default {
           }
         }
       }
-    },
-    'formdata.cover.type': function () {
-      // alert(this.formdata.cover.type)
-      let { articleId } = this.$route.params
-      if (!articleId) {
-        if (this.formdata.cover.type === -1 || this.formdata.cover.type === 0) {
-          this.formdata.cover.images = []
-        } else if (this.formdata.cover.type === 1) {
-          this.formdata.cover.images = ['']
-        } else if (this.formdata.cover.type === 3) {
-          this.formdata.cover.images = ['', '', '']
-        }
-      } else {
-        if (this.formdata.cover.type === -1 || this.formdata.cover.type === 0) {
-          this.formdata.cover.images = []
-        } else if (this.formdata.cover.type === 1) {
-          this.formdata.cover.images = [this.formdata.cover.images[0]]
-        } else if (this.formdata.cover.type === 3) {
-          if (this.formdata.cover.images.length < 2) {
-            this.formdata.cover.images = [this.formdata.cover.images[0], '', '']
-          }
-        }
-      }
     }
+    // 'formdata.cover.type': function () {
+    //   // alert(this.formdata.cover.type)
+    //   let { articleId } = this.$route.params
+    //   if (!articleId) {
+    //     if (this.formdata.cover.type === -1 || this.formdata.cover.type === 0) {
+    //       this.formdata.cover.images = []
+    //     } else if (this.formdata.cover.type === 1) {
+    //       this.formdata.cover.images = ['']
+    //     } else if (this.formdata.cover.type === 3) {
+    //       this.formdata.cover.images = ['', '', '']
+    //     }
+    //   } else {
+    //     if (this.formdata.cover.type === -1 || this.formdata.cover.type === 0) {
+    //       this.formdata.cover.images = []
+    //     } else if (this.formdata.cover.type === 1) {
+    //       this.formdata.cover.images = [this.formdata.cover.images[0]]
+    //     } else if (this.formdata.cover.type === 3) {
+    //       if (this.formdata.cover.images.length < 2) {
+    //         this.formdata.cover.images = [this.formdata.cover.images[0], '', '']
+    //       }
+    //     }
+    //   }
+    // }
   }
 }
 </script>

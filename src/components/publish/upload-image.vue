@@ -1,73 +1,83 @@
 <template>
-  <div>
-    <el-upload
-  class="avatar-uploader"
-  action="https://jsonplaceholder.typicode.com/posts/"
-  :show-file-list="false"
-  :on-success="handleAvatarSuccess"
-  :before-upload="beforeAvatarUpload">
-  <img v-if="imageUrl" :src="imageUrl" class="avatar">
-  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-</el-upload>
-
-  </div>
+  <el-tabs v-model="activeName">
+    <el-tab-pane label="素材库" name="material">
+      <div class="select-img-list">
+        <el-card class="img-card" v-for="(item,index) in list" :key="index">
+          <img @click="clickImg(item.url)" :src="item.url" alt />
+        </el-card>
+      </div>
+      <el-row type="flex" justify="center">
+        <el-pagination background layout="prev, pager, next"
+         :total="page.total"
+         :current-page="page.currenPage"
+         :page-size="page.pageSize"
+         @current-change="changePage"
+         ></el-pagination>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane label="上传图片" name="uploadImg"></el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
 export default {
   data () {
     return {
-      imageUrl: ''
+      imageUrl: '',
+      activeName: 'material',
+      list: [],
+      page: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 8
+
+      }
     }
   },
   methods: {
-    handleAvatarSuccess (res, file) {
-      console.log(file)
-      console.log(URL.createObjectURL(file.raw))
-      this.imageUrl = URL.createObjectURL(file.raw)
-      this.getImageUrl()
-    },
-    beforeAvatarUpload (file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
-    },
     getImageUrl () {
       this.$emit('ImageUrl', this.imageUrl)
+    },
+    getAllImg () {
+      this.$axios({
+        url: '/user/images',
+        params: {
+          collect: false,
+          page: this.page.currentPage,
+          per_page: this.page.pageSize
+        }
+      }).then(result => {
+        this.list = result.data.results
+        this.page.total = result.data.total_count
+      })
+    },
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.getAllImg()
+    },
+    clickImg (url) {
+      this.$emit('selectOneImg', url)
     }
+  },
+  created () {
+    this.getAllImg()
   }
 }
 </script>
 
-<style>
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
+<style lang="less" scoped>
+  .select-img-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    .img-card {
+      width: 120px;
+      height: 120px;
+      margin: 10px 10px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
   }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+}
 </style>

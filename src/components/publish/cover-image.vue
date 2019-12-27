@@ -1,9 +1,12 @@
 <template>
   <div class="cover">
-    <div v-for="(item,index) in list" :key="index" class='cover-item'>
-         <!-- <upload-image @ImageUrl="receiveData"></upload-image> -->
-         <img :src="list[0] ? list[index] : defaultImage" alt="">
-      </div>
+    <div v-for="(item,index) in list" :key="index" class='cover-item' @click="openDialog(index)">
+
+         <img :src="item ? item : defaultImage" alt="">
+    </div>
+    <el-dialog :visible="dialogVisible" @close="closeDialog">
+      <upload-image @selectOneImg="receiveData"></upload-image>
+    </el-dialog>
   </div>
 </template>
 
@@ -13,20 +16,27 @@ export default {
   data () {
     return {
       // imageUrl: this.list[0] ? '../../assets/img/pic_bg.png' : this.list[0],
-      defaultImage: require('../../assets/img/pic_bg.png')
+      defaultImage: require('../../assets/img/pic_bg.png'),
+      dialogVisible: false,
+      selectIndex: -1
     }
   },
   methods: {
-    receiveData (imageUrl) {
-      this.imageUrl = imageUrl
-      this.getImageUrl()
+    openDialog (index) {
+      this.dialogVisible = true
+      this.selectIndex = index
     },
-    getImageUrl () {
-      this.$emit('ImageUrl', this.imageUrl)
+    closeDialog () {
+      this.dialogVisible = false
+    },
+    receiveData (imageUrl) {
+      this.$emit('selectOneImg', imageUrl, this.selectIndex)
+      this.closeDialog()
     }
+
   },
   created () {
-    console.log(this.list)
+    // console.log(this.list)
   }
 }
 </script>

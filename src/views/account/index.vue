@@ -73,6 +73,7 @@ export default {
             data: this.formData
           }).then(result => {
             //   认为保存成功
+            eventBus.$emit('updateUserInfoSuccess')
             this.$message({
               type: 'success',
               message: '保存信息成功'

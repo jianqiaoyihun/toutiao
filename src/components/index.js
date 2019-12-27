@@ -3,7 +3,6 @@ import layoutHeader from './home/layout-header'
 import breadcrumb from './common/bread-crumb'
 import coverImage from './publish/cover-image'
 import uploadImage from './publish/upload-image'
-
 // 所有自定义组件的插件
 export default {
   install: function (Vue) {

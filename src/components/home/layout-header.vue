@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -32,14 +33,9 @@ export default {
     }
   },
   created () {
-    // let token = window.localStorage.getItem('user-token')
-    this.$axios({
-      url: '/user/profile'
-      // headers: {
-      //   Authorization: `Bearer ${token}`
-      // }
-    }).then(result => {
-      this.userInfo = result.data
+    this.getUserInfo()
+    eventBus.$on('updateUserInfoSuccess', () => {
+      this.getUserInfo()
     })
   },
   methods: {
@@ -49,7 +45,20 @@ export default {
       } else if (command === 'quit') {
         window.localStorage.removeItem('user-token')
         this.$router.push('/login')
+      } else if (command === 'info') {
+        this.$router.push('/home/account')
       }
+    },
+    getUserInfo () {
+      // let token = window.localStorage.getItem('user-token')
+      this.$axios({
+        url: '/user/profile'
+      // headers: {
+      //   Authorization: `Bearer ${token}`
+      // }
+      }).then(result => {
+        this.userInfo = result.data
+      })
     }
   }
 }
@@ -68,6 +77,7 @@ export default {
           }
       }
       .right {
+        margin-right: 20px;
           img {
               width:40px;
               height: 40px;
@@ -78,7 +88,7 @@ export default {
   }
   .fixed {
     position: fixed;
-    width:1120px;
+    width:1135px;
     background-color: #fff;
     z-index:100;
     box-shadow: 0px 2px 2px #888888

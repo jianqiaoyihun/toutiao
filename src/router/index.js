@@ -34,6 +34,9 @@ const routes = [
       }, {
         path: 'material',
         component: () => import('../views/material')// 按需加载，挂载路由
+      }, {
+        path: 'account',
+        component: () => import('../views/account')// 按需加载，挂载路由
       }
     ]
   }, {

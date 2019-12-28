@@ -37,6 +37,18 @@ const routes = [
       }, {
         path: 'account',
         component: () => import('../views/account')// 按需加载，挂载路由
+      }, {
+        path: 'fansinfo',
+        component: () => import('../views/fansinfo')// 按需加载，挂载路由
+      }, {
+        path: 'fanslist',
+        component: () => import('../views/fanslist')// 按需加载，挂载路由
+      }, {
+        path: 'fanslife',
+        component: () => import('../views/fanslife')// 按需加载，挂载路由
+      }, {
+        path: 'picture',
+        component: () => import('../views/picture')// 按需加载，挂载路由
       }
     ]
   }, {

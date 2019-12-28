@@ -41,17 +41,15 @@ export default {
   },
   methods: {
     submitLogin () {
-      this.$refs.myForm.validate((isOk) => {
+      this.$refs.myForm.validate(async (isOk) => {
         if (isOk) {
-          // console.log('dengluchenggong')
-          this.$axios({
+          let result = await this.$axios({
             url: '/authorizations',
             method: 'post',
             data: this.loginForm
-          }).then(result => {
-            window.localStorage.setItem('user-token', result.data.token)
-            this.$router.push('/')
           })
+          window.localStorage.setItem('user-token', result.data.token)
+          this.$router.push('/')
         }
       })
     }

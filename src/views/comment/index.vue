@@ -54,17 +54,16 @@ export default {
       this.page.currentPage = newPage
       this.getComment()
     },
-    getComment () {
+    async getComment () {
       this.loading = true
-      this.$axios({
+      let result = await this.$axios({
         url: '/articles',
         params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
         // 增加请求参数，
-      }).then(result => {
-        this.list = result.data.results
-        this.page.total = result.data.total_count // 获取文章总数
-        this.loading = false
       })
+      this.list = result.data.results
+      this.page.total = result.data.total_count // 获取文章总数
+      this.loading = false
     },
     formatterBool (row, column, cellValue, index) {
       // row  当前行数据
@@ -73,26 +72,23 @@ export default {
       // index  当前下标
       return cellValue ? '正常' : '关闭'
     },
-    openOrClose (row) {
+    async openOrClose (row) {
       let mess = row.comment_status ? '关闭' : '打开'
-      this.$confirm(`您是否确定要${mess}评论？`).then(() => {
-        // console.log(row)
-        this.$axios({
-          method: 'put',
-          url: '/comments/status',
-          params: { article_id: row.id.toString() },
-          data: {
-            allow_comment: !row.comment_status
-          }
-        }).then(result => {
-          console.log(123)
-          this.$message({
-            type: 'success',
-            message: '操作成功'
-          })
-          this.getComment()
-        })
+      await this.$confirm(`您是否确定要${mess}评论？`)
+      // console.log(row)
+      await this.$axios({
+        method: 'put',
+        url: '/comments/status',
+        params: { article_id: row.id.toString() },
+        data: {
+          allow_comment: !row.comment_status
+        }
       })
+      this.$message({
+        type: 'success',
+        message: '操作成功'
+      })
+      this.getComment()
     }
   },
   created () {

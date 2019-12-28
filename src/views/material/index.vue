@@ -58,19 +58,18 @@ export default {
     }
   },
   methods: {
-    getAllMaterial () {
+    async getAllMaterial () {
       this.loading = true
-      this.$axios({
+      let result = await this.$axios({
         url: '/user/images',
         params: { collect: this.activeName === 'collect', page: this.page.currentPage, per_page: this.page.pageSize }
         // 在这里collect需要的参数是布尔值，this.activeName是当前所在的页面的name，可以和collect进行判断
         // 因为默认的是all，这里如果是all，就是false，如果不是就是true，
-      }).then((result) => {
-        this.loading = false
-        // console.log(result.data.results)
-        this.list = result.data.results
-        this.page.total = result.data.total_count // 获取文章总数
       })
+      this.loading = false
+      // console.log(result.data.results)
+      this.list = result.data.results
+      this.page.total = result.data.total_count // 获取文章总数
     },
     changeTab () {
       this.page.currentPage = 1
@@ -80,51 +79,44 @@ export default {
       this.page.currentPage = newPage
       this.getAllMaterial()
     },
-    uploadImg (params) {
+    async uploadImg (params) {
       this.loading = true
       let form = new FormData()
       form.append('image', params.file)
-      this.$axios({
+      await this.$axios({
         url: '/user/images',
         method: 'post',
         data: form
-      }).then(result => {
-        this.loading = false
-        this.getAllMaterial()
       })
+      this.loading = false
+      this.getAllMaterial()
     },
     //  添加和取消收藏，通过判断收藏状态来实现
-    collectImage (item) {
+    async collectImage (item) {
       // console.log(item)
       let shoucang = !item.is_collected
-      this.$axios({
+      await this.$axios({
         url: `/user/images/${item.id}`,
         method: 'put',
         // params: { target: id },
         data: { collect: shoucang }
-      }).then((message) => {
-        let messages = shoucang ? '收藏成功' : '取消收藏'
-        this.$message({
-          type: 'success',
-          message: messages
-        })
-        this.getAllMaterial()
       })
+      let messages = shoucang ? '收藏成功' : '取消收藏'
+      this.$message({
+        type: 'success',
+        message: messages
+      })
+      this.getAllMaterial()
     },
-    deleteImage (item) {
-      this.$confirm('您是否确定要删除这个图片？').then(() => {
-        this.$axios({
-          url: `/user/images/${item.id}`,
-          method: 'delete'
+    async deleteImage (item) {
+      await this.$confirm('您是否确定要删除这个图片？')
+      await this.$axios({
+        url: `/user/images/${item.id}`,
+        method: 'delete'
         // params: { target: id }
-        }).then((result) => {
-          console.log(111)
-          // alert(result)
-          this.getAllMaterial()
-        }).catch(() => {
-          // this.getAllMaterial()
-        })
       })
+      // alert(result)
+      this.getAllMaterial()
     }
   },
   created () {

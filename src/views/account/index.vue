@@ -56,45 +56,42 @@ export default {
     }
   },
   methods: {
-    getUserInfo () {
-      this.$axios({
+    async getUserInfo () {
+      let result = await this.$axios({
         url: '/user/profile'
-      }).then(result => {
-        this.formData = result.data
       })
+      this.formData = result.data
     },
     editUserInfo () {
-      this.$refs.myForm.validate((isOK) => {
+      this.$refs.myForm.validate(async (isOK) => {
         //   调用保存方法
         if (isOK) {
-          this.$axios({
+          await this.$axios({
             url: '/user/profile',
             method: 'patch',
             data: this.formData
-          }).then(result => {
-            //   认为保存成功
-            eventBus.$emit('updateUserInfoSuccess')
-            this.$message({
-              type: 'success',
-              message: '保存信息成功'
-            })
+          })
+          //   认为保存成功
+          eventBus.$emit('updateUserInfoSuccess')
+          this.$message({
+            type: 'success',
+            message: '保存信息成功'
           })
         }
       })
     },
-    uploadImg (params) {
+    async uploadImg (params) {
       this.loading = true // 打开弹层
       let data = new FormData() // 实例化对象
       data.append('photo', params.file) // 加入参数
-      this.$axios({
+      let result = await this.$axios({
         url: '/user/photo',
         method: 'patch',
         data
-      }).then(result => {
-        this.formData.photo = result.data.photo // 设置头像地址
-        eventBus.$emit('updateUserInfoSuccess')
-        this.loading = false // 关调弹层
       })
+      this.formData.photo = result.data.photo // 设置头像地址
+      eventBus.$emit('updateUserInfoSuccess')
+      this.loading = false // 关调弹层
     }
   },
   created () {

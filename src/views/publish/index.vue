@@ -69,32 +69,29 @@ export default {
     }
   },
   methods: {
-    getChannels () {
-      this.$axios({
+    async getChannels () {
+      let result = await this.$axios({
         url: '/channels'
-      }).then(result => {
-        this.channelsList = result.data.channels
       })
+      this.channelsList = result.data.channels
     },
-    publishArticle (draft) {
-      this.$refs.publishForm.validate((isOk) => {
+    async publishArticle (draft) {
+      this.$refs.publishForm.validate(async (isOk) => {
         let { articleId } = this.$route.params
-        this.$axios({
+        await this.$axios({
           url: articleId ? `/articles/${articleId}` : `/articles`,
           method: articleId ? 'put' : 'post',
           params: { draft },
           data: this.formdata
-        }).then(() => {
-          this.$router.push('/home/articles')
         })
+        this.$router.push('/home/articles')
       })
     },
-    getArticlesById (articleId) {
-      this.$axios({
+    async getArticlesById (articleId) {
+      let res = await this.$axios({
         url: `/articles/${articleId}`
-      }).then(res => {
-        this.formdata = res.data
       })
+      this.formdata = res.data
     },
     receiveData (img, index) {
       this.formdata.cover.images.splice(index, 1, img)

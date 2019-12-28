@@ -54,16 +54,15 @@ export default {
       this.collapse = !this.collapse
       eventBus.$emit('collapseOrOpen', this.collapse)
     },
-    getUserInfo () {
+    async getUserInfo () {
       // let token = window.localStorage.getItem('user-token')
-      this.$axios({
+      let result = await this.$axios({
         url: '/user/profile'
       // headers: {
       //   Authorization: `Bearer ${token}`
       // }
-      }).then(result => {
-        this.userInfo = result.data
       })
+      this.userInfo = result.data
     }
   }
 }

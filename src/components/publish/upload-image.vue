@@ -42,18 +42,17 @@ export default {
     getImageUrl () {
       this.$emit('ImageUrl', this.imageUrl)
     },
-    getAllImg () {
-      this.$axios({
+    async getAllImg () {
+      let result = await this.$axios({
         url: '/user/images',
         params: {
           collect: false,
           page: this.page.currentPage,
           per_page: this.page.pageSize
         }
-      }).then(result => {
-        this.list = result.data.results
-        this.page.total = result.data.total_count
       })
+      this.list = result.data.results
+      this.page.total = result.data.total_count
     },
     changePage (newPage) {
       this.page.currentPage = newPage
@@ -62,16 +61,15 @@ export default {
     clickImg (url) {
       this.$emit('selectOneImg', url)
     },
-    uploadImg (params) {
+    async uploadImg (params) {
       let data = new FormData()
       data.append('image', params.file)
-      this.$axios({
+      let result = await this.$axios({
         url: '/user/images',
         method: 'post',
         data
-      }).then((result) => {
-        this.$emit('selectOneImg', result.data.url)
       })
+      this.$emit('selectOneImg', result.data.url)
     }
   },
   created () {

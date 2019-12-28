@@ -109,14 +109,18 @@ export default {
       this.getAllMaterial()
     },
     async deleteImage (item) {
-      await this.$confirm('您是否确定要删除这个图片？')
-      await this.$axios({
-        url: `/user/images/${item.id}`,
-        method: 'delete'
+      try {
+        await this.$confirm('您是否确定要删除这个图片？')
+        await this.$axios({
+          url: `/user/images/${item.id}`,
+          method: 'delete'
         // params: { target: id }
-      })
-      // alert(result)
-      this.getAllMaterial()
+        })
+        // alert(result)
+        this.getAllMaterial()
+      } catch (err) {
+        // alert('quxiaole')
+      }
     }
   },
   created () {

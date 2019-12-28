@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { getChannels, getArticlesById, publishArticle } from '../../actions/article'
 export default {
   data () {
     return {
@@ -70,27 +71,19 @@ export default {
   },
   methods: {
     async getChannels () {
-      let result = await this.$axios({
-        url: '/channels'
-      })
+      let result = await getChannels()
       this.channelsList = result.data.channels
     },
     async publishArticle (draft) {
       this.$refs.publishForm.validate(async (isOk) => {
         let { articleId } = this.$route.params
-        await this.$axios({
-          url: articleId ? `/articles/${articleId}` : `/articles`,
-          method: articleId ? 'put' : 'post',
-          params: { draft },
-          data: this.formdata
-        })
+        let formDatas = this.formdata
+        await publishArticle(draft, articleId, formDatas)
         this.$router.push('/home/articles')
       })
     },
     async getArticlesById (articleId) {
-      let res = await this.$axios({
-        url: `/articles/${articleId}`
-      })
+      let res = await getArticlesById(articleId)
       this.formdata = res.data
     },
     receiveData (img, index) {
